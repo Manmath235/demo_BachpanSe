@@ -1,0 +1,180 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * BachpanSe design system.
+ * Brand: violet #6C4CF1, mint #2ED3A0, sunny #FFC93C, coral #FF6B6B,
+ * background #F7F5FF, text #1E1B3A — all in oklch.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-mint: var(--mint);
+  --color-mint-soft: var(--mint-soft);
+  --color-sunny: var(--sunny);
+  --color-sunny-soft: var(--sunny-soft);
+  --color-coral: var(--coral);
+  --color-coral-soft: var(--coral-soft);
+  --color-violet-soft: var(--violet-soft);
+  --color-ink-soft: var(--ink-soft);
+  --font-display: "Nunito", "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+:root {
+  --radius: 1.25rem;
+  --background: oklch(0.975 0.013 295.3);
+  --foreground: oklch(0.243 0.058 285.7);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.243 0.058 285.7);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.243 0.058 285.7);
+  --primary: oklch(0.552 0.233 284.7);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.947 0.028 285);
+  --secondary-foreground: oklch(0.42 0.13 285);
+  --muted: oklch(0.947 0.02 285);
+  --muted-foreground: oklch(0.52 0.04 285);
+  --accent: oklch(0.947 0.028 285);
+  --accent-foreground: oklch(0.42 0.13 285);
+  --destructive: oklch(0.712 0.181 22.8);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.92 0.02 285);
+  --input: oklch(0.92 0.02 285);
+  --ring: oklch(0.552 0.233 284.7);
+  --mint: oklch(0.774 0.15 166.4);
+  --mint-soft: oklch(0.94 0.055 166);
+  --sunny: oklch(0.861 0.159 86.4);
+  --sunny-soft: oklch(0.96 0.07 86);
+  --coral: oklch(0.712 0.181 22.8);
+  --coral-soft: oklch(0.94 0.045 22.8);
+  --violet-soft: oklch(0.94 0.045 284.7);
+  --ink-soft: oklch(0.35 0.06 285.7);
+}
+
+.dark {
+  --background: oklch(0.243 0.058 285.7);
+  --foreground: oklch(0.984 0.003 247.858);
+  --card: oklch(0.3 0.06 285.7);
+  --card-foreground: oklch(0.984 0.003 247.858);
+  --popover: oklch(0.3 0.06 285.7);
+  --popover-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.65 0.2 284.7);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.35 0.06 285.7);
+  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --muted: oklch(0.35 0.06 285.7);
+  --muted-foreground: oklch(0.7 0.04 285.7);
+  --accent: oklch(0.35 0.06 285.7);
+  --accent-foreground: oklch(0.984 0.003 247.858);
+  --destructive: oklch(0.712 0.181 22.8);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.552 0.233 284.7);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html,
+  body {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-violet-soft);
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      oklch(1 0 0 / 65%),
+      transparent
+    );
+    animation: shimmer 1.1s infinite;
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes lms-fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+@utility phone-shadow {
+  box-shadow:
+    0 25px 80px -20px oklch(0.3 0.1 285 / 45%),
+    0 8px 30px -10px oklch(0.3 0.1 285 / 30%);
+}

@@ -1,0 +1,67 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Mail, KeyRound } from "lucide-react";
+import { useLmsUi } from "./state";
+import { LmsButton, lmsInputCls } from "./ui";
+import { Logo } from "../shared";
+
+export function LmsLogin() {
+  const signIn = useLmsUi((s) => s.signIn);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    signIn();
+  };
+
+  return (
+    <div className="flex min-h-0 flex-1 items-center justify-center bg-background">
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex w-[400px] flex-col items-center rounded-2xl border border-border bg-white p-8 shadow-sm"
+      >
+        <Logo size="lg" />
+        <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+          Admin Panel · LMS
+        </p>
+        <h1 className="mt-4 font-display text-xl font-extrabold">Log in to the content studio</h1>
+        <form onSubmit={submit} className="mt-5 w-full space-y-3">
+          <label className="block">
+            <span className="mb-1 block text-[12px] font-bold">Email</span>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@bachpanse.in"
+                className={`${lmsInputCls} pl-9`}
+              />
+            </div>
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-[12px] font-bold">Password</span>
+            <div className="relative">
+              <KeyRound className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className={`${lmsInputCls} pl-9`}
+              />
+            </div>
+          </label>
+          <LmsButton type="submit" className="mt-1 h-10 w-full text-[14px]">
+            Log in
+          </LmsButton>
+          <p className="text-center text-[11px] font-semibold text-muted-foreground">
+            Demo: any email and password
+          </p>
+        </form>
+      </motion.div>
+    </div>
+  );
+}

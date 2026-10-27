@@ -1,0 +1,444 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>BachpanSe User Flows</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one header, a legend, a sticky tab strip, then one flow at a time: diagram on a canvas that scrolls sideways, rules and open points underneath. */
+:root{
+  --bg:#F6F4FB; --surface:#FFFFFF; --ink:#1E1B3A; --muted:#67637F; --line:#9E99BC; --hair:#E3DFEF;
+  --parent:#6C4CF1; --child:#11906B; --admin:#4B5A70; --shared:#7D7998;
+  --amber:#D99A00; --dec-bg:#FFF5D4; --coral:#D9453D; --coral-bg:#FFECEA; --tbc:#9A5B00; --tbc-bg:#FCEBC7;
+  --display:"Nunito", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Figtree", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#13111D; --surface:#1D1A2C; --ink:#EDEBF7; --muted:#A4A0BC; --line:#625E80; --hair:#2D2943;
+  --parent:#A08CFF; --child:#3FD3A4; --admin:#9FB0C6; --shared:#8F8BA8;
+  --amber:#F2C443; --dec-bg:#362D10; --coral:#FF7D75; --coral-bg:#3A1E21; --tbc:#F5BD62; --tbc-bg:#3B2B10;
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#13111D; --surface:#1D1A2C; --ink:#EDEBF7; --muted:#A4A0BC; --line:#625E80; --hair:#2D2943;
+  --parent:#A08CFF; --child:#3FD3A4; --admin:#9FB0C6; --shared:#8F8BA8;
+  --amber:#F2C443; --dec-bg:#362D10; --coral:#FF7D75; --coral-bg:#3A1E21; --tbc:#F5BD62; --tbc-bg:#3B2B10;
+  color-scheme:dark; }
+
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:28px 56px}
+header.top{display:flex;flex-wrap:wrap;gap:12px 32px;align-items:flex-end;justify-content:space-between;padding-bottom:20px;border-bottom:1px solid var(--hair)}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(28px,4vw,40px);line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1 span{color:var(--parent)}
+.lede{color:var(--muted);margin:8px 0 0;max-width:62ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:999px;border:1px solid var(--hair);background:var(--surface);color:var(--ink);white-space:nowrap}
+
+.legend{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;align-items:center;margin:18px 0 6px;font-size:13px}
+.legend h3{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.legend .row{display:flex;flex-wrap:wrap;gap:8px 16px;min-width:0}
+.lg{display:inline-flex;align-items:center;gap:7px;color:var(--ink)}
+.sw{width:14px;height:14px;border-radius:4px;display:inline-block;flex:none}
+.sh{display:inline-block;flex:none}
+@media (max-width:560px){.legend{grid-template-columns:1fr}}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top, 0px);z-index:5;background:var(--bg);margin-top:14px;padding-block:10px;border-bottom:1px solid var(--hair);display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--bg)}
+nav.tabs button{font:600 13.5px/1 var(--body);color:var(--muted);background:transparent;border:1px solid transparent;border-radius:999px;padding:9px 14px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:8px}
+nav.tabs button .n{font-family:var(--mono);font-size:11px;opacity:.7}
+nav.tabs button:hover{color:var(--ink);border-color:var(--hair)}
+nav.tabs button[aria-selected="true"]{color:var(--surface);background:var(--ink)}
+nav.tabs button:focus-visible{outline:2px solid var(--parent);outline-offset:2px}
+
+section.flow{padding-top:22px}
+.fhead{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;justify-content:space-between}
+.fhead h2{font-family:var(--display);font-weight:800;font-size:24px;margin:0;text-wrap:balance}
+.fhead p{margin:4px 0 0;color:var(--muted);max-width:70ch}
+.who{display:flex;gap:6px;flex-wrap:wrap}
+.who span{font-size:12px;font-weight:700;padding:4px 9px;border-radius:999px;color:var(--rc);background:color-mix(in srgb, var(--rc) 12%, var(--surface))}
+.banner{margin-top:14px;padding:10px 14px;border-radius:10px;background:var(--tbc-bg);color:var(--tbc);font-size:13.5px;font-weight:500;max-width:80ch}
+
+.scroller{margin-top:16px;overflow-x:auto;border:1px solid var(--hair);border-radius:14px;background:var(--surface);
+  background-image:radial-gradient(color-mix(in srgb, var(--line) 35%, transparent) 1px, transparent 1px);background-size:18px 18px}
+.canvas{position:relative;margin:0 auto}
+.canvas > svg{position:absolute;inset:0;overflow:visible}
+.edge{fill:none;stroke:var(--line);stroke-width:1.6}
+.edge.loop{stroke-dasharray:5 4}
+.elabel rect{fill:var(--surface);stroke:var(--hair)}
+.elabel text{font:600 11.5px var(--body);fill:var(--ink)}
+.elabel.yes text{fill:var(--child)} .elabel.no text{fill:var(--coral)}
+.lane rect{fill:color-mix(in srgb, var(--rc) 5%, transparent)}
+.lane text{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;fill:var(--rc)}
+.diamond{fill:var(--dec-bg);stroke:var(--amber);stroke-width:1.6}
+
+.node{position:absolute;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:8px 12px;border-radius:12px;
+  background:var(--surface);border:1.5px solid color-mix(in srgb, var(--rc) 45%, var(--surface));color:var(--ink);text-align:left}
+.node .tag{font:500 9.5px var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--rc)}
+.node b{font-size:13px;font-weight:700;line-height:1.25}
+.node small{font-size:11.5px;color:var(--muted);line-height:1.3}
+.node.screen{background:color-mix(in srgb, var(--rc) 7%, var(--surface))}
+.node.system{background:color-mix(in srgb, var(--shared) 10%, var(--surface));border-style:dashed;border-color:var(--line)}
+.node.system .tag{color:var(--muted)}
+.node.action{border-style:dashed;border-color:var(--line)}
+.node.action .tag{color:var(--muted)}
+.node.rule{background:var(--coral-bg);border-color:var(--coral)}
+.node.rule .tag{color:var(--coral)}
+.node.notify{background:var(--coral-bg);border-color:color-mix(in srgb, var(--coral) 55%, var(--surface))}
+.node.notify .tag{color:var(--coral);display:flex;align-items:center;gap:5px}
+.node.start,.node.end{border-radius:999px;align-items:center;text-align:center;padding:6px 16px}
+.node.start{background:color-mix(in srgb, var(--rc) 12%, var(--surface));border-color:var(--rc)}
+.node.end{background:var(--rc);border-color:var(--rc);color:var(--surface)}
+.node.end small{color:color-mix(in srgb, var(--surface) 82%, transparent)}
+.node.dec{background:transparent;border:none;align-items:center;text-align:center;padding:0 40px}
+.node.dec b{font-size:12.5px}
+.node.link{cursor:pointer;border-style:dashed;border-color:var(--rc);background:var(--surface)}
+.node.link b{text-decoration:underline;text-decoration-color:color-mix(in srgb, var(--rc) 50%, transparent);text-underline-offset:3px}
+.node.link:hover{background:color-mix(in srgb, var(--rc) 10%, var(--surface))}
+.node.link:focus-visible{outline:2px solid var(--rc);outline-offset:2px}
+.node .tbc{position:absolute;top:-9px;right:10px;font:700 9.5px var(--mono);letter-spacing:.06em;color:var(--tbc);background:var(--tbc-bg);border:1px solid color-mix(in srgb, var(--tbc) 40%, transparent);padding:1px 6px;border-radius:999px}
+
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px;margin-top:18px}
+.notes > div{min-width:0;background:var(--surface);border:1px solid var(--hair);border-radius:12px;padding:14px 16px}
+.notes h3{margin:0 0 8px;font-family:var(--display);font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
+.notes h3 i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.notes ul{margin:0;padding-left:18px;display:grid;gap:5px;font-size:14px}
+.notes li::marker{color:var(--muted)}
+.foot{margin-top:28px;color:var(--muted);font-size:12.5px}
+@media (prefers-reduced-motion:no-preference){ section.flow{animation:fade .25s ease-out} @keyframes fade{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}} }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow">Phase 1 MVP · User flows</p>
+      <h1>Bachpan<span>Se</span> User Flows</h1>
+      <p class="lede">How parents, children and the BachpanSe admin move through the Phase 1 app, from first launch to everyday use. Based on BRD V1 (23 October 2026).</p>
+    </div>
+    <div class="meta">
+      <span class="chip">Hybrid app · Android + iOS</span>
+      <span class="chip">Parent and Child roles</span>
+      <span class="chip">Admin web panel (LMS)</span>
+      <span class="chip">Virtual money only</span>
+    </div>
+  </header>
+
+  <div class="legend" aria-label="Legend">
+    <h3>Who</h3>
+    <div class="row">
+      <span class="lg"><i class="sw" style="background:var(--parent)"></i>Parent</span>
+      <span class="lg"><i class="sw" style="background:var(--child)"></i>Child</span>
+      <span class="lg"><i class="sw" style="background:var(--admin)"></i>Admin</span>
+      <span class="lg"><i class="sw" style="background:var(--shared)"></i>Shared / system</span>
+    </div>
+    <h3>Shapes</h3>
+    <div class="row">
+      <span class="lg"><svg class="sh" width="26" height="14"><rect x="1" y="1" width="24" height="12" rx="6" fill="none" stroke="var(--ink)" stroke-width="1.4"/></svg>Start / end</span>
+      <span class="lg"><svg class="sh" width="22" height="16"><rect x="1" y="1" width="20" height="14" rx="3" fill="none" stroke="var(--ink)" stroke-width="1.4"/></svg>Screen</span>
+      <span class="lg"><svg class="sh" width="18" height="18"><polygon points="9,1 17,9 9,17 1,9" fill="var(--dec-bg)" stroke="var(--amber)" stroke-width="1.4"/></svg>Decision</span>
+      <span class="lg"><svg class="sh" width="22" height="16"><rect x="1" y="1" width="20" height="14" rx="3" fill="none" stroke="var(--line)" stroke-dasharray="3 2" stroke-width="1.4"/></svg>System step / message</span>
+      <span class="lg"><i class="sw" style="background:var(--coral-bg);border:1.4px solid var(--coral)"></i>Push / rule</span>
+      <span class="lg"><svg class="sh" width="22" height="16"><rect x="1" y="1" width="20" height="14" rx="3" fill="none" stroke="var(--parent)" stroke-dasharray="3 2" stroke-width="1.4"/></svg>Opens another flow</span>
+      <span class="lg"><span style="font:700 9.5px var(--mono);color:var(--tbc);background:var(--tbc-bg);padding:1px 6px;border-radius:999px">TBC</span>To be confirmed in discovery</span>
+    </div>
+  </div>
+
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+  <main id="panel"></main>
+  <p class="foot">Assumed steps are marked TBC and follow the BRD. The admin panel is a separate web panel and is not part of the mobile app.</p>
+</div>
+
+<script>
+const COLW=236, ROWH=124, PAD=24;
+const DIM={start:[188,52],end:[188,52],dec:[184,92]};
+const DEF=[188,76];
+const ROLE={p:"var(--parent)",c:"var(--child)",a:"var(--admin)",s:"var(--shared)"};
+const ROLENAME={p:"Parent",c:"Child",a:"Admin",s:""};
+const TAG={screen:"Screen",system:"System",action:"Message",rule:"Rule",notify:"Push notification",link:"Opens flow"};
+
+function N(id,r,c,type,role,label,sub,extra){return Object.assign({id,r,c,type,role,label,sub:sub||""},extra||{});}
+
+const FLOWS=[
+{key:"overview",title:"App entry and roles",summary:"Every user starts here. Returning users log in quickly; new users pick Parent or Child. The admin works in a separate web panel.",
+ who:["p","c","a"],
+ nodes:[
+  N("s",0,1,"start","s","Open the app"),
+  N("sp",1,1,"screen","s","Splash screen","Animated logo"),
+  N("d1",2,1,"dec","s","Signed in before?"),
+  N("ql",2,2,"screen","s","Quick login","Parent: OTP · Child: PIN"),
+  N("hm",2,3,"end","s","Home for saved role"),
+  N("wel",3,1,"screen","s","Welcome carousel","3 intro slides, Skip or Next"),
+  N("rs",4,1,"screen","s","Role select","I'm a Parent · I'm a Child"),
+  N("adm",4,3,"link","a","Admin panel (LMS)","Separate web panel",{to:"admin"}),
+  N("d2",5,1,"dec","s","Who is using the app?"),
+  N("lp",6,0,"link","p","Parent onboarding","Sign up and add child",{to:"parent-onboarding"}),
+  N("lc",6,2,"link","c","Child joins with invite","Code or QR from parent",{to:"child-join"}),
+  N("ph",7,0,"end","p","Parent home"),
+  N("ch",7,2,"end","c","Child home")],
+ edges:[["s","sp"],["sp","d1"],["d1","ql","Yes"],["ql","hm"],["d1","wel","No"],["wel","rs"],["rs","d2"],["d2","lp","Parent"],["d2","lc","Child"],["lp","ph"],["lc","ch"]],
+ rules:["One app with separate Parent and Child roles.","A child cannot sign up without a parent invite.","Returning parents log in with OTP; returning children use their PIN."],
+ tbc:["Parent login method (mobile number with OTP is assumed)."]},
+
+{key:"parent-onboarding",title:"Parent onboarding",summary:"The parent signs up, gives consent, adds the child by date of birth and gets an invite code for the child.",
+ who:["p"],
+ nodes:[
+  N("s",0,1,"start","p","Parent taps 'I'm a Parent'"),
+  N("mob",1,1,"screen","p","Enter mobile number","+91"),
+  N("otp",2,1,"screen","p","Verify OTP","6-digit code, resend after 30s",{tbc:true}),
+  N("d1",3,1,"dec","p","OTP correct?"),
+  N("err",3,2,"action","s","Show error","Retry or resend the code"),
+  N("pr",4,1,"screen","p","Parent profile","Name"),
+  N("con",5,1,"screen","p","Consent screen","What we collect, why, privacy links",{tbc:true}),
+  N("d2",6,1,"dec","p","Consent given?"),
+  N("blk",6,2,"rule","s","Continue stays disabled","Consent is required to go on"),
+  N("add",7,1,"screen","p","Add child","Child's name and date of birth"),
+  N("d3",8,1,"dec","p","Age 10 to 17?"),
+  N("age",8,2,"action","s","Not supported in Phase 1","Below 10 or 18+ shows a message"),
+  N("inv",9,1,"screen","p","Invite code and QR","Share with the child"),
+  N("home",10,1,"end","p","Parent home")],
+ edges:[["s","mob"],["mob","otp"],["otp","d1"],["d1","err","No"],["err","otp"],["d1","pr","Yes"],["pr","con"],["con","d2"],["d2","blk","No"],["d2","add","Yes"],["add","d3"],["d3","age","No"],["age","add"],["d3","inv","Yes"],["inv","home"]],
+ rules:["Verifiable parental consent comes before any child data is collected.","The date of birth sets the child's age band and learning journey.","Only children aged 10 to 17 can be added in Phase 1."],
+ tbc:["How the parent is verified for DPDP consent (OQ-01).","Login method: mobile number with OTP is assumed.","Whether a parent can add more than one child."]},
+
+{key:"child-join",title:"Child joins with invite",summary:"The child links to the parent with the invite code or QR, then sets a PIN and an avatar.",
+ who:["c"],
+ nodes:[
+  N("s",0,1,"start","c","Child taps 'I'm a Child'"),
+  N("d1",1,1,"dec","c","How to join?"),
+  N("code",2,0,"screen","c","Enter invite code","6 characters"),
+  N("qr",2,2,"screen","c","Scan QR code","From the parent's phone"),
+  N("d2",3,1,"dec","c","Code valid?"),
+  N("err",3,3,"action","s","Show error","Ask the parent for a new code"),
+  N("wel",4,1,"screen","c","Welcome screen","Linked to parent"),
+  N("pin",5,1,"screen","c","Create 4-digit PIN"),
+  N("pin2",6,1,"screen","c","Confirm PIN"),
+  N("d3",7,1,"dec","c","PINs match?"),
+  N("perr",7,2,"action","s","Show error","Enter the PIN again"),
+  N("av",8,1,"screen","c","Choose avatar"),
+  N("home",9,1,"end","c","Child home")],
+ edges:[["s","d1"],["d1","code","Code"],["d1","qr","QR"],["code","d2"],["qr","d2"],["d2","err","No"],["err","d1"],["d2","wel","Yes"],["wel","pin"],["pin","pin2"],["pin2","d3"],["d3","perr","No"],["perr","pin"],["d3","av","Yes"],["av","home"]],
+ rules:["The child can only join through the parent's invite.","The PIN is used for every later login."],
+ tbc:["Whether the child needs their own mobile number.","Whether the child can use the parent's phone instead of their own."]},
+
+{key:"virtual-money",title:"Virtual money",summary:"The parent sends virtual money and the child records spending. Both entries land in one shared log, and the balance is recalculated for both.",
+ who:["p","c"],
+ lanes:[{label:"Parent",from:0,to:0,role:"p"},{label:"Shared",from:1,to:2,role:"s"},{label:"Child",from:3,to:4,role:"c"}],
+ nodes:[
+  N("ps",0,0,"start","p","Parent taps 'Send money'"),
+  N("pa",1,0,"screen","p","Enter amount","Type (pocket money, gift, other), note"),
+  N("pc",2,0,"screen","p","Confirm send"),
+  N("pin",3,0,"system","p","Money in entry saved","Shows in parent and child logs"),
+  N("pn",3,1,"notify","c","Push to child","Money received",{tbc:true}),
+  N("cs",0,3,"start","c","Child taps 'Add spending'"),
+  N("ca",1,3,"screen","c","Enter amount","Category, note, date"),
+  N("cd",2,3,"dec","c","More than balance?"),
+  N("cw",2,4,"action","s","Friendly warning","Child can still save"),
+  N("co",3,3,"system","c","Money out entry saved"),
+  N("log",4,1.5,"system","s","Shared transaction log","One log for parent and child"),
+  N("bal",5,1.5,"system","s","Balance recalculated","Money in minus money out"),
+  N("pd",6,1,"end","p","Parent dashboard updated"),
+  N("cb",6,2,"end","c","Child balance updated")],
+ edges:[["ps","pa"],["pa","pc"],["pc","pin"],["pin","pn"],["pin","log"],["cs","ca"],["ca","cd"],["cd","cw","Yes"],["cd","co","No"],["cw","co"],["co","log"],["log","bal"],["bal","pd"],["bal","cb"]],
+ rules:["No real money moves through the app; the balance is virtual.","The parent cannot approve, edit or block the child's spending.","Task rewards are added as money in (see Tasks and rewards).","Practice money is separate and never changes this balance."],
+ tbc:["Whether the child can edit or delete an entry after saving.","Exact push notification events."]},
+
+{key:"tasks",title:"Tasks and rewards",summary:"The parent creates a task with a reward. When it is done, the reward is added to the child's balance as money in.",
+ who:["p","c"],
+ banner:"Assumed completion flow: the child marks the task as done and the parent approves it. Who marks a task complete is to be confirmed during discovery.",
+ nodes:[
+  N("s",0,0,"start","p","Parent taps 'Create task'"),
+  N("f",1,0,"screen","p","Task details","Title, description, reward, due date"),
+  N("sv",2,0,"system","p","Task saved","Status: To do"),
+  N("nt",2,1,"notify","c","Push to child","New task",{tbc:true}),
+  N("cl",3,2,"screen","c","My tasks","Tasks and their rewards"),
+  N("md",4,2,"screen","c","Child taps 'Mark as done'","",{tbc:true}),
+  N("wt",5,2,"system","c","Waiting for parent","Status updated"),
+  N("np",5,3,"notify","p","Push to parent","Task marked as done",{tbc:true}),
+  N("rv",6,0,"screen","p","Parent reviews task"),
+  N("d",7,0,"dec","p","Approve?"),
+  N("no",7,1,"action","s","Not yet","Task goes back to To do"),
+  N("rw",8,0,"system","s","Reward added as money in"),
+  N("end",9,0,"end","s","Balance and logs updated")],
+ edges:[["s","f"],["f","sv"],["sv","nt"],["sv","cl"],["cl","md"],["md","wt"],["wt","np"],["wt","rv"],["rv","d"],["d","no","No"],["d","rw","Yes"],["rw","end"]],
+ rules:["Only the parent can create tasks.","The reward is recorded as money in, in both logs."],
+ tbc:["Who marks a task as complete: child, parent, or child with parent approval.","Exact push notification events."]},
+
+{key:"learning",title:"Learning",summary:"The child works through modules for their age band: animated lessons, then a quiz. Progress shows on the parent dashboard.",
+ who:["c"],
+ nodes:[
+  N("s",0,1,"start","c","Child opens Learn tab"),
+  N("mp",1,1,"screen","c","Module path","Modules for the child's age band"),
+  N("d1",2,1,"dec","c","Module unlocked?"),
+  N("lk",2,2,"action","s","Locked","Finish the previous module first"),
+  N("lp",3,1,"screen","c","Lesson player","Short animated story cards"),
+  N("qz",4,1,"screen","c","Quiz","Instant feedback with explanation"),
+  N("d2",5,1,"dec","c","Passed?"),
+  N("rt",5,2,"action","s","Try again","Review the answers"),
+  N("pts",6,1,"system","c","Points, streak, badges updated"),
+  N("par",6,2,"system","p","Progress on parent dashboard"),
+  N("nx",7,1,"end","c","Next lesson unlocked")],
+ edges:[["s","mp"],["mp","d1"],["d1","lk","No"],["lk","mp"],["d1","lp","Yes"],["lp","qz"],["qz","d2"],["d2","rt","No"],["rt","qz"],["d2","pts","Yes"],["pts","par"],["pts","nx"]],
+ rules:["Lesson content is provided by BachpanSe and uploaded through the admin panel.","Points and streaks are learning measures, never shown as a credit score."],
+ tbc:["Number of lessons, topics and age bands at launch (decided by BachpanSe)."]},
+
+{key:"goals-practice",title:"Goals and practice money",summary:"The child sets savings goals and tracks progress, and plays practice challenges with coins that are clearly not real.",
+ who:["c"],
+ lanes:[{label:"Savings goals",from:0,to:1,role:"c"},{label:"Practice money",from:3,to:3,role:"c"}],
+ nodes:[
+  N("g0",0,0,"start","c","Child taps 'New goal'"),
+  N("g1",1,0,"screen","c","Goal details","Name, emoji, target amount"),
+  N("g2",2,0,"screen","c","Goal card","Progress ring"),
+  N("g3",3,0,"screen","c","Add to goal","Amount set aside",{tbc:true}),
+  N("gd",4,0,"dec","c","Target reached?"),
+  N("gn",4,1,"action","s","Progress updated","Keep saving"),
+  N("ge",5,0,"end","c","Goal reached","Celebration and badge"),
+  N("p0",0,3,"start","c","Child opens Practice"),
+  N("p1",1,3,"screen","c","Choose a challenge","For example: Shop smart, Save or spend"),
+  N("p2",2,3,"screen","c","Play with practice coins","Labelled: not real money"),
+  N("p3",3,3,"screen","c","Result and feedback"),
+  N("p4",4,3,"system","p","Score on parent dashboard"),
+  N("p5",5,3,"end","c","Back to Practice")],
+ edges:[["g0","g1"],["g1","g2"],["g2","g3"],["g3","gd"],["gd","gn","No"],["gn","g3"],["gd","ge","Yes"],["p0","p1"],["p1","p2"],["p2","p3"],["p3","p4"],["p4","p5"]],
+ rules:["Goal progress is shown on the parent dashboard.","Practice money is clearly labelled and kept separate from the virtual wallet."],
+ tbc:["How money is allocated to a goal (set aside from the balance or tracked separately).","The exact difference between practice money and the virtual wallet."]},
+
+{key:"parent-dashboard",title:"Guardian dashboard",summary:"What the parent sees and can do day to day. The parent can send money and create tasks, but has no control over the child's spending.",
+ who:["p"],
+ nodes:[
+  N("s",0,1.5,"start","p","Parent home"),
+  N("d",1,1.5,"dec","p","Choose a tab"),
+  N("h",2,0,"screen","p","Home","Balance, money in and out, learning, goals, practice"),
+  N("a",2,1,"screen","p","Activity","Full log, filters, month"),
+  N("t",2,2,"screen","p","Tasks","To do, waiting, completed"),
+  N("p",2,3,"screen","p","Profile","Linked child, notifications"),
+  N("h2",3,0,"link","p","Send money","Opens the virtual money flow",{to:"virtual-money"}),
+  N("a2",3,1,"screen","p","Entry detail","Read only"),
+  N("t2",3,2,"link","p","Create or review a task","Opens the tasks flow",{to:"tasks"}),
+  N("p2",3,3,"screen","p","Privacy and consent","Consent record with date and time"),
+  N("a3",4,1,"rule","s","No approve, edit or block","Parent cannot change the child's spending"),
+  N("d2",4,3,"dec","p","Withdraw consent?"),
+  N("p3",5,3,"screen","p","Confirmation screen","Explains what happens next",{tbc:true})],
+ edges:[["s","d"],["d","h"],["d","a"],["d","t"],["d","p"],["h","h2"],["a","a2"],["a2","a3"],["t","t2"],["p","p2"],["p2","d2"],["d2","p3","Yes"]],
+ rules:["The dashboard shows the transaction log, balance, learning progress, goals and practice activity.","The parent can send virtual money and create tasks.","The parent cannot approve, edit or block entries, or set spending limits."],
+ tbc:["What withdrawing consent does to the child's data.","Whether the dashboard needs a switcher for more than one child."]},
+
+{key:"admin",title:"Admin panel (LMS)",summary:"The BachpanSe team uploads and manages lessons, quizzes and challenges in a web panel. Published content appears in the child app.",
+ who:["a"],
+ nodes:[
+  N("s",0,1,"start","a","Admin opens web panel"),
+  N("l",1,1,"screen","a","Admin login"),
+  N("lib",2,1,"screen","a","Content library","Lessons, quizzes, challenges"),
+  N("d",3,1,"dec","a","What to manage?"),
+  N("le",4,0,"screen","a","Create or edit lesson"),
+  N("qe",4,2,"screen","a","Create or edit quiz or challenge"),
+  N("le2",5,0,"screen","a","Upload animation or video","Set the age band"),
+  N("qe2",5,2,"screen","a","Questions and answers","Link to a lesson"),
+  N("pub",6,1,"dec","a","Publish?"),
+  N("dr",6,3,"action","s","Saved as draft","Not visible to children"),
+  N("live",7,1,"end","a","Live in the child app")],
+ edges:[["s","l"],["l","lib"],["lib","d"],["d","le","Lesson"],["d","qe","Quiz or challenge"],["le","le2"],["qe","qe2"],["le2","pub"],["qe2","pub"],["pub","dr","No"],["pub","live","Yes"]],
+ rules:["Lessons can be added without a new app release.","All content is provided by BachpanSe."],
+ tbc:["LMS features beyond uploading and managing content."]}
+];
+
+function dims(n){return DIM[n.type]||DEF;}
+function geo(n,top){const [w,h]=dims(n);const cx=PAD+n.c*COLW+COLW/2, cy=top+n.r*ROWH+ROWH/2;
+  return {w,h,cx,cy,top:cy-h/2,bottom:cy+h/2,left:cx-w/2,right:cx+w/2};}
+
+function route(A,B,a,b,top){
+  if(B.r>A.r){
+    if(A.c===B.c) return [[a.cx,a.bottom],[b.cx,b.top]];
+    const y=b.cy-ROWH/2;
+    return [[a.cx,a.bottom],[a.cx,y],[b.cx,y],[b.cx,b.top]];
+  }
+  if(B.r===A.r){ return B.c>A.c?[[a.right,a.cy],[b.left,b.cy]]:[[a.left,a.cy],[b.right,b.cy]]; }
+  if(B.c!==A.c){ const x=b.cx<a.cx?b.right:b.left; return [[a.cx,a.top],[a.cx,b.cy],[x,b.cy]]; }
+  const x=a.right+28; return [[a.right,a.cy],[x,a.cy],[x,b.cy],[b.right,b.cy]];
+}
+function pathD(pts){
+  const R=9; let d=`M${pts[0][0]},${pts[0][1]}`;
+  for(let i=1;i<pts.length;i++){
+    const [x,y]=pts[i];
+    if(i<pts.length-1){
+      const [px,py]=pts[i-1],[nx,ny]=pts[i+1];
+      const l1=Math.hypot(x-px,y-py), l2=Math.hypot(nx-x,ny-y), r=Math.min(R,l1/2,l2/2);
+      const ax=x-(x-px)/l1*r, ay=y-(y-py)/l1*r, bx=x+(nx-x)/l2*r, by=y+(ny-y)/l2*r;
+      d+=` L${ax},${ay} Q${x},${y} ${bx},${by}`;
+    } else d+=` L${x},${y}`;
+  }
+  return d;
+}
+function esc(s){return String(s).replace(/[&<>"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));}
+const BELL='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>';
+
+function renderFlow(f){
+  const top=f.lanes?40:8;
+  const maxC=Math.max(...f.nodes.map(n=>n.c)), maxR=Math.max(...f.nodes.map(n=>n.r));
+  const W=PAD*2+(maxC+1)*COLW, H=top+(maxR+1)*ROWH+12;
+  const by={}; f.nodes.forEach(n=>by[n.id]=n);
+  let svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs><marker id="ah-${f.key}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--line)"/></marker></defs>`;
+  (f.lanes||[]).forEach(l=>{const x=PAD+l.from*COLW+6, w=(l.to-l.from+1)*COLW-12;
+    svg+=`<g class="lane" style="--rc:${ROLE[l.role]}"><rect x="${x}" y="6" width="${w}" height="${H-12}" rx="12"/><text x="${x+14}" y="26">${esc(l.label)}</text></g>`;});
+  f.nodes.filter(n=>n.type==="dec").forEach(n=>{const g=geo(n,top);
+    svg+=`<polygon class="diamond" points="${g.cx},${g.top} ${g.right},${g.cy} ${g.cx},${g.bottom} ${g.left},${g.cy}"/>`;});
+  let labels="";
+  f.edges.forEach(([fa,fb,lab])=>{
+    const A=by[fa],B=by[fb]; const a=geo(A,top), b=geo(B,top); const pts=route(A,B,a,b,top);
+    const loop=B.r<A.r;
+    svg+=`<path class="edge${loop?" loop":""}" d="${pathD(pts)}" marker-end="url(#ah-${f.key})"/>`;
+    if(lab){
+      let lx,ly;
+      if(pts.length===2){lx=(pts[0][0]+pts[1][0])/2; ly=(pts[0][1]+pts[1][1])/2;}
+      else {lx=(pts[1][0]+pts[2][0])/2; ly=(pts[1][1]+pts[2][1])/2;}
+      const tw=lab.length*6.4+14, cls=/^yes$/i.test(lab)?"yes":/^no$/i.test(lab)?"no":"";
+      labels+=`<g class="elabel ${cls}"><rect x="${lx-tw/2}" y="${ly-10}" width="${tw}" height="20" rx="10"/><text x="${lx}" y="${ly+4}" text-anchor="middle">${esc(lab)}</text></g>`;
+    }
+  });
+  svg+=labels+"</svg>";
+  let html="";
+  f.nodes.forEach(n=>{
+    const g=geo(n,top); const rc=ROLE[n.role];
+    let tag="";
+    if(TAG[n.type]){
+      const who=ROLENAME[n.role]; const t=TAG[n.type];
+      tag=`<span class="tag">${n.type==="notify"?BELL:""}${n.type==="notify"||!who?t:who+" · "+t}</span>`;
+    }
+    const attrs=n.type==="link"?` role="button" tabindex="0" data-to="${n.to}" aria-label="Open flow: ${esc(n.label)}"`:"";
+    html+=`<div class="node ${n.type}" style="left:${g.left}px;top:${g.top}px;width:${g.w}px;height:${g.h}px;--rc:${rc}"${attrs}>${tag}<b>${esc(n.label)}${n.type==="link"?" →":""}</b>${n.sub?`<small>${esc(n.sub)}</small>`:""}${n.tbc?'<span class="tbc">TBC</span>':""}</div>`;
+  });
+  return `<div class="canvas" style="width:${W}px;height:${H}px">${svg}${html}</div>`;
+}
+
+const tabs=document.getElementById("tabs"), panel=document.getElementById("panel");
+FLOWS.forEach((f,i)=>{
+  const b=document.createElement("button");
+  b.id="tab-"+f.key; b.setAttribute("role","tab"); b.dataset.key=f.key;
+  b.innerHTML=`<span class="n">${String(i+1).padStart(2,"0")}</span>${esc(f.title)}`;
+  b.addEventListener("click",()=>show(f.key,true));
+  tabs.appendChild(b);
+});
+function show(key,scroll){
+  const f=FLOWS.find(x=>x.key===key)||FLOWS[0];
+  tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",b.dataset.key===f.key?"true":"false"));
+  const who=f.who.map(r=>`<span style="--rc:${ROLE[r]}">${ROLENAME[r]}</span>`).join("");
+  panel.innerHTML=`<section class="flow" role="tabpanel" aria-labelledby="tab-${f.key}">
+    <div class="fhead"><div><h2>${esc(f.title)}</h2><p>${esc(f.summary)}</p></div><div class="who">${who}</div></div>
+    ${f.banner?`<div class="banner">${esc(f.banner)}</div>`:""}
+    <div class="scroller">${renderFlow(f)}</div>
+    <div class="notes">
+      <div><h3><i style="background:var(--child)"></i>Rules in this flow</h3><ul>${f.rules.map(r=>`<li>${esc(r)}</li>`).join("")}</ul></div>
+      <div><h3><i style="background:var(--tbc)"></i>To be confirmed</h3><ul>${f.tbc.map(r=>`<li>${esc(r)}</li>`).join("")}</ul></div>
+    </div></section>`;
+  panel.querySelectorAll(".node.link").forEach(el=>{
+    const go=()=>show(el.dataset.to,true);
+    el.addEventListener("click",go);
+    el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go();}});
+  });
+  try{history.replaceState(null,"","#"+f.key);}catch(e){}
+  const tb=document.getElementById("tab-"+f.key); if(tb&&tb.scrollIntoView) tb.scrollIntoView({block:"nearest",inline:"nearest"});
+  if(scroll){const y=tabs.getBoundingClientRect().top+window.scrollY-4; if(window.scrollY>y) window.scrollTo({top:y});}
+}
+show((location.hash||"").slice(1),false);
+</script>
+
+</body></html>
