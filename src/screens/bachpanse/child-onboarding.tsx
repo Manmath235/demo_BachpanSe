@@ -5,7 +5,7 @@ import { useApp, useToast } from "@/lib/bachpanse/store";
 import logoAsset from "@/assets/bachpanse-logo.png.asset.json";
 import { Button, CodeBoxes } from "@/components/bachpanse/ui";
 import { AppHeader } from "@/components/bachpanse/cards";
-import { Screen, ScrollArea, Logo } from "./shared";
+import { Screen, ScrollArea, Logo, logoFallback } from "./shared";
 
 /* ---------- Enter invite code ---------- */
 export function ChildCodeScreen() {
@@ -73,6 +73,7 @@ export function ChildScanScreen() {
               src={logoAsset.url}
               alt="BachpanSe — Money Wise!"
               className="h-24 w-auto"
+              onError={logoFallback}
             />
           </div>
           {!done && (

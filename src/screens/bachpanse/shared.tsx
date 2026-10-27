@@ -68,6 +68,12 @@ export function ScrollArea({
 }
 
 /* ---------- Logo ---------- */
+/** The full logo is hosted by Lovable; outside Lovable it 404s, so fall back to the bundled icon. */
+export function logoFallback(e: React.SyntheticEvent<HTMLImageElement>) {
+  const img = e.currentTarget;
+  if (!img.src.endsWith("/icon-192.png")) img.src = "/icon-192.png";
+}
+
 export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const h = { sm: "h-7", md: "h-10", lg: "h-16" }[size];
   return (
@@ -75,6 +81,7 @@ export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
       src={logoAsset.url}
       alt="BachpanSe — Money Wise!"
       className={`${h} w-auto`}
+      onError={logoFallback}
     />
   );
 }
@@ -104,6 +111,7 @@ export function SplashScreen() {
         animate={{ scale: 1, rotate: 0 }}
         transition={{ type: "spring", damping: 12, stiffness: 200 }}
         className="h-40 w-auto drop-shadow-xl"
+        onError={logoFallback}
       />
       <motion.div
         initial={{ opacity: 0, y: 16 }}

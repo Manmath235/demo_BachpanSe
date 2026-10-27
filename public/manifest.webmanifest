@@ -1,0 +1,17 @@
+{
+  "name": "BachpanSe",
+  "short_name": "BachpanSe",
+  "description": "Learn money the fun way. A financial learning and money app for kids and parents.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F7F5FF",
+  "theme_color": "#6C4CF1",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

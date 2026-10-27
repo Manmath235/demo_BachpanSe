@@ -1,8 +1,14 @@
 import { create } from "zustand";
 import type { Challenge, LmsLesson, Quiz } from "@/lib/bachpanse/content";
+import {
+  adminSignIn,
+  adminSignOut,
+  cloudEnabled,
+  restoreAdminSession,
+} from "@/lib/bachpanse/cloud";
 
 export type ViewId = "mobile" | "lms";
-export type LmsPage = "modules" | "lessons" | "quizzes" | "challenges";
+export type LmsPage = "modules" | "lessons" | "quizzes" | "challenges" | "learners";
 
 const VIEW_KEY = "bachpanse-view";
 
@@ -26,7 +32,11 @@ interface LmsUiState {
   view: ViewId;
   setView: (v: ViewId) => void;
   signedIn: boolean;
-  signIn: () => void;
+  authBusy: boolean;
+  authError: string;
+  /** Signs in with Supabase when configured, otherwise falls back to the local demo login. */
+  signInWith: (email: string, password: string) => Promise<void>;
+  restoreSession: () => Promise<void>;
   signOut: () => void;
   page: LmsPage;
   pendingPage: LmsPage | null;
@@ -72,8 +82,31 @@ export const useLmsUi = create<LmsUiState>((set, get) => ({
     set({ view: v });
   },
   signedIn: false,
-  signIn: () => set({ signedIn: true, page: "lessons" }),
-  signOut: () =>
+  authBusy: false,
+  authError: "",
+  signInWith: async (email, password) => {
+    if (!cloudEnabled) {
+      set({ signedIn: true, page: "lessons", authError: "" });
+      return;
+    }
+    set({ authBusy: true, authError: "" });
+    try {
+      await adminSignIn(email.trim(), password);
+      set({ signedIn: true, page: "lessons", authBusy: false });
+    } catch (e) {
+      set({ authBusy: false, authError: e instanceof Error ? e.message : "Could not log in." });
+    }
+  },
+  restoreSession: async () => {
+    if (!cloudEnabled) return;
+    try {
+      if (await restoreAdminSession()) set({ signedIn: true });
+    } catch {
+      /* offline or expired: the login form is shown */
+    }
+  },
+  signOut: () => {
+    void adminSignOut();
     set({
       signedIn: false,
       page: "lessons",
@@ -81,7 +114,8 @@ export const useLmsUi = create<LmsUiState>((set, get) => ({
       lessonDraft: null,
       quizDraft: null,
       challengeDraft: null,
-    }),
+    });
+  },
   page: "lessons",
   pendingPage: null,
   confirmNav: (p) => {
