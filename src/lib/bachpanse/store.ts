@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { AppData, Goal, Task, Transaction } from "./types";
 import { seedData } from "./mock-data";
@@ -495,7 +495,11 @@ export const useApp = create<AppState>()(
       resetDemo: () => set((s) => ({ data: seedData(), role: s.role })),
     }),
     {
-      name: "bachpanse-demo-v1",
+      // The admin build keeps its own key so it never shares state with a PWA on the same origin.
+      name:
+        import.meta.env.VITE_APP_MODE === "admin"
+          ? "bachpanse-admin-v1"
+          : "bachpanse-demo-v1",
       version: 4,
       // v4 adds shared LMS content (modules/lessons/quizzes/challenges) inside AppData.
       // Existing saved state is kept; content is injected where missing.

@@ -1,6 +1,8 @@
-import { BookOpen, Layers, ListChecks, Gamepad2, LogOut } from "lucide-react";
+import { BookOpen, Layers, ListChecks, Gamepad2, LogOut, Users } from "lucide-react";
 import { useLmsUi, type LmsPage } from "./state";
 import { LmsButton, CenterDialog } from "./ui";
+import { LearnersPage } from "./learners";
+import { SyncBadge } from "./sync-badge";
 import { ModulesPage } from "./modules";
 import { LessonsPage } from "./lessons";
 import { QuizzesPage } from "./quizzes";
@@ -12,6 +14,7 @@ const NAV: { id: LmsPage; label: string; icon: React.ReactNode }[] = [
   { id: "lessons", label: "Lessons", icon: <BookOpen className="h-4 w-4" /> },
   { id: "quizzes", label: "Quizzes", icon: <ListChecks className="h-4 w-4" /> },
   { id: "challenges", label: "Challenges", icon: <Gamepad2 className="h-4 w-4" /> },
+  { id: "learners", label: "Learners", icon: <Users className="h-4 w-4" /> },
 ];
 
 export function LmsLayout() {
@@ -52,9 +55,9 @@ export function LmsLayout() {
             </button>
           ))}
         </nav>
-        <p className="mt-auto px-2 text-[10px] font-semibold leading-relaxed text-muted-foreground">
-          Prototype — all data stays in this browser.
-        </p>
+        <div className="mt-auto px-2">
+          <SyncBadge />
+        </div>
       </aside>
 
       {/* Main column */}
@@ -79,6 +82,7 @@ export function LmsLayout() {
             {page === "lessons" && <LessonsPage />}
             {page === "quizzes" && <QuizzesPage />}
             {page === "challenges" && <ChallengesPage />}
+            {page === "learners" && <LearnersPage />}
           </div>
         </main>
       </div>

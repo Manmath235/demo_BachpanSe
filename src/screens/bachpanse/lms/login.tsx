@@ -4,15 +4,18 @@ import { Mail, KeyRound } from "lucide-react";
 import { useLmsUi } from "./state";
 import { LmsButton, lmsInputCls } from "./ui";
 import { Logo } from "../shared";
+import { cloudEnabled } from "@/lib/bachpanse/cloud";
 
 export function LmsLogin() {
-  const signIn = useLmsUi((s) => s.signIn);
+  const signInWith = useLmsUi((s) => s.signInWith);
+  const authBusy = useLmsUi((s) => s.authBusy);
+  const authError = useLmsUi((s) => s.authError);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    signIn();
+    void signInWith(email, password);
   };
 
   return (
@@ -54,11 +57,16 @@ export function LmsLogin() {
               />
             </div>
           </label>
-          <LmsButton type="submit" className="mt-1 h-10 w-full text-[14px]">
-            Log in
+          {authError && (
+            <p role="alert" className="rounded-lg bg-coral-soft px-3 py-2 text-[12px] font-semibold text-coral">
+              {authError}
+            </p>
+          )}
+          <LmsButton type="submit" disabled={authBusy} className="mt-1 h-10 w-full text-[14px]">
+            {authBusy ? "Logging in…" : "Log in"}
           </LmsButton>
           <p className="text-center text-[11px] font-semibold text-muted-foreground">
-            Demo: any email and password
+            {cloudEnabled ? "Use your admin account" : "Demo mode (no Supabase set up): any email and password"}
           </p>
         </form>
       </motion.div>
